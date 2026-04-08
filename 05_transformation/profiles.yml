@@ -1,0 +1,12 @@
+mcasb_pipeline:
+  outputs:
+    dev:
+      type: clickhouse
+      schema: warehouse
+      host: localhost
+      port: 8123
+      user: admin
+      password: admin123
+      dbname: warehouse
+      secure: False
+  target: dev

@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: stg_daily_prices
+    description: Precios diarios limpios
+    columns:
+      - name: ticker
+        tests:
+          - not_null
+      - name: date
+        tests:
+          - not_null
+      - name: close
+        tests:
+          - not_null
+      - name: volume
+        tests:
+          - not_null

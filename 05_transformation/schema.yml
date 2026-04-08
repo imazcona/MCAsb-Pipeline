@@ -1,0 +1,20 @@
+tee models/staging/schema.yml > /dev/null << 'ENDFILE'
+version: 2
+
+models:
+  - name: stg_daily_prices
+    description: "Precios diarios limpios y validados"
+    columns:
+      - name: ticker
+        tests:
+          - not_null
+      - name: date
+        tests:
+          - not_null
+      - name: close
+        tests:
+          - not_null
+      - name: volume
+        tests:
+          - not_null
+ENDFILE

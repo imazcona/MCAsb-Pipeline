@@ -1,0 +1,76 @@
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: mcasb_landing_zone
+    environment:
+      POSTGRES_DB: ${PG_DB}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./02_landing_zone/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.8
+    container_name: mcasb_warehouse
+    environment:
+      CLICKHOUSE_DB: ${CH_DB}
+      CLICKHOUSE_USER: ${CH_USER}
+      CLICKHOUSE_PASSWORD: ${CH_PASSWORD}
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - ch_data:/var/lib/clickhouse
+      - ./03_warehouse/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+
+  airflow:
+    image: apache/airflow:2.7.3-python3.11
+    container_name: mcasb_airflow
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        pip install --quiet yfinance pandas sqlalchemy psycopg2-binary clickhouse-driver dbt-clickhouse
+        airflow db init
+        airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com || true
+        airflow webserver -D
+        airflow scheduler
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://admin:admin123@postgres:5432/landing_zone
+      AIRFLOW__CORE__FERNET_KEY: ''
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      AIRFLOW__WEBSERVER__EXPOSE_CONFIG: 'true'
+      PG_HOST: postgres
+      PG_PORT: "5432"
+      PG_DB: ${PG_DB}
+      PG_USER: ${PG_USER}
+      PG_PASSWORD: ${PG_PASSWORD}
+      CH_HOST: clickhouse
+      CH_USER: ${CH_USER}
+      CH_PASSWORD: ${CH_PASSWORD}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./06_orchestration/dags:/opt/airflow/dags
+      - ./01_extraction/src:/opt/airflow/scripts
+      - ./04_integration:/opt/airflow/integration
+      - ./05_transformation:/opt/airflow/dbt_project
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  pg_data:
+  ch_data:

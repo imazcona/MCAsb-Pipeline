@@ -1,0 +1,13 @@
+tee models/staging/sources.yml > /dev/null << 'ENDFILE'
+version: 2
+
+sources:
+  - name: warehouse
+    database: warehouse
+    tables:
+      - name: basic_info
+      - name: daily_prices
+      - name: fundamentals
+      - name: holders
+      - name: upgrades_downgrades
+ENDFILE
