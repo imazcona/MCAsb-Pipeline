@@ -7,7 +7,8 @@ Pipeline end-to-end que extrae, integra, valida y transforma datos financieros d
 
 ## Arquitectura
 
-![Arquitectura del Pipeline](07_docs/architecture.png)
+<img width="4404" height="3136" alt="image" src="https://github.com/user-attachments/assets/fbf1b00b-d048-4b8e-adc9-c8fb03a30d6c" />
+
 
 ---
 
@@ -200,5 +201,4 @@ El DAG `mcasb_bank_pipeline` ejecuta 4 tareas en secuencia:
 ---
 
 ## Autor
-MCASB - Prueba de Capacidades en Ingeniería de Datos
-Subdirección de Gobierno de Datos
+MCASB - Maridania Cabrera Azcona
