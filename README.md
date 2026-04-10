@@ -1,4 +1,4 @@
-# MCASB Data Pipeline
+# MCA Data Pipeline
 ### Pipeline de datos bancarios - Bolsa de valores USA
 
 Pipeline end-to-end que extrae, integra, valida y transforma datos financieros de bancos que cotizan en la bolsa de Estados Unidos, utilizando datos de Yahoo Finance (2024-2025).
