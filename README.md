@@ -53,33 +53,6 @@ Para cada banco se extraen 5 conjuntos de datos:
 4. **Tenedores institucionales**: holder, shares, value
 5. **Calificaciones**: upgrades, downgrades de analistas
 
-mcasb-pipeline/
-├── 01_extraction/          # Script Python (yfinance)
-│   └── src/
-│       ├── main.py         # Script principal de extracción
-│       ├── tickers.py      # Lista de 20 bancos USA
-│       └── extractors.py   # Funciones de extracción por categoría
-├── 02_landing_zone/        # Configuración PostgreSQL
-│   └── init.sql            # Crear tablas del landing zone
-├── 03_warehouse/           # Configuración ClickHouse
-│   └── init.sql            # Crear tablas OLAP
-├── 04_integration/         # Integración PG → ClickHouse
-│   └── pg_to_clickhouse.py
-├── 05_transformation/      # Modelos dbt
-│   ├── dbt_project.yml
-│   ├── profiles.yml
-│   └── models/
-│       ├── staging/        # Limpieza y validación
-│       └── marts/          # Tabla resumen mensual
-├── 06_orchestration/       # Orquestación con Airflow
-│   └── dags/
-│       └── mcasb_pipeline_dag.py
-├── 07_docs/                # Documentación y screenshots
-│   └── screenshots/
-├── docker-compose.yml      # Levanta toda la infraestructura
-└── .env.example            # Variables de entorno (plantilla)
-
----
 
 ## Cómo ejecutar el proyecto
 
@@ -142,16 +115,20 @@ dbt test --profiles-dir .
 ## Screenshots del entorno
 
 ### Airflow UI - DAG del pipeline
-![Airflow UI](07_docs/screenshots/airflow_ui.png)
+![aiflow_ui](https://github.com/user-attachments/assets/897c8d38-cbf3-4e03-9b39-1babdb35e456)
+
 
 ### PostgreSQL - Datos en el landing zone
-![PostgreSQL Data](07_docs/screenshots/postgres_data.png)
+<img width="451" height="225" alt="postgresdatos" src="https://github.com/user-attachments/assets/d99e4015-90d5-424b-a339-d011f8c5f993" />
+
 
 ### ClickHouse - Tabla resumen mensual
-![ClickHouse Summary](07_docs/screenshots/clickhouse_summary.png)
+<img width="519" height="217" alt="clickhouse_resumen" src="https://github.com/user-attachments/assets/e479be97-1f1e-4bd5-bad2-9594955fc508" />
+
 
 ### dbt - Tests de validación pasando
-![dbt Tests](07_docs/screenshots/dbt_tests.png)
+<img width="779" height="341" alt="testDBT" src="https://github.com/user-attachments/assets/5e604d1e-946a-4a2c-a7a7-0d09e5797364" />
+
 
 ---
 
